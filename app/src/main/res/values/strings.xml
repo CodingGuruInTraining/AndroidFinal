@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">AndroidFinal</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="new_book_name_textview">Book Name:</string>
+    <string name="new_book_name_hint">Harry Potter and the Deadly Dentist</string>
+    <string name="new_book_reader_textview">Reader:</string>
+    <string name="new_book_reader_hint">Lil Tommy</string>
+    <string name="new_book_pages_textview">Total Pages:</string>
+    <string name="new_book_pages_hint">42</string>
+    <string name="submit_button">Submit</string>
+</resources>
