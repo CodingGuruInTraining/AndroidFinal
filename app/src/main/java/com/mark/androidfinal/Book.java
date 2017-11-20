@@ -8,6 +8,7 @@ import java.util.Date;
  */
 
 public class Book {
+    // Attributes of Book objects.
     private String book_name;
     private String reader;
     private Date start_date;
@@ -17,6 +18,7 @@ public class Book {
     private ArrayList<Float> hours_spent_per_week;
     private boolean completed;
 
+    // Constructor.
     public Book(String book_name, String reader, int total_pages) {
         this.book_name = book_name;
         this.reader = reader;

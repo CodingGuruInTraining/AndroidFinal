@@ -10,4 +10,7 @@
     <string name="new_book_pages_textview">Total Pages:</string>
     <string name="new_book_pages_hint">42</string>
     <string name="submit_button">Submit</string>
+    <string name="empty_field_msg">Please fill in all fields</string>
+    <string name="parse_error_msg">Error converting number</string>
+    <string name="general_error_msg">Unknown error occurred</string>
 </resources>

@@ -17,9 +17,10 @@ import android.widget.Toast;
 public class NewBookFragment extends Fragment {
 
     private NewBookListener mNewBookListener;
-    private String emptyField = "Please fill in all fields";
-    private String parseError = "Error converting number";
-    private String genError = "Unknown error occurred";
+    // Error strings.
+    private String emptyField = getString(R.string.empty_field_msg);
+    private String parseError = getString(R.string.parse_error_msg);
+    private String genError = getString(R.string.general_error_msg);
 
     @Override
     public void onAttach(Context context) {
@@ -33,30 +34,39 @@ public class NewBookFragment extends Fragment {
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        // Inflates View.
         View view = inflater.inflate(R.layout.fragment_new_book, container, false);
 
+        // Sets up widgets.
         final EditText nameEditText = (EditText) view.findViewById(R.id.new_book_name);
         final EditText readerEditText = (EditText) view.findViewById(R.id.new_book_reader);
         final EditText pagesEditText = (EditText) view.findViewById(R.id.new_book_pages);
         Button submitButton = (Button) view.findViewById(R.id.new_book_submit_button);
 
+        // Submit Button's click event.
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 try {
+                    // Retrieves values from widgets.
                     String name = nameEditText.getText().toString();
                     String reader = readerEditText.getText().toString();
                     String pagesStr = pagesEditText.getText().toString();
 
+                    // Verifies fields aren't empty before continuing.
                     if (name.equals("") || reader.equals("") || pagesStr.equals("")) {
                         Toast.makeText(getActivity(), emptyField, Toast.LENGTH_SHORT).show();
                     } else {
+                        // Converts pages string to int.
                         int pages = Integer.parseInt(pagesStr);
+                        // Sends values back to MainActivity.
                         mNewBookListener.newBookData(name, reader, pages);
                     }
-                } catch (NumberFormatException error) {
+                }
+                catch (NumberFormatException error) {
                     Toast.makeText(getActivity(), parseError, Toast.LENGTH_SHORT).show();
-                } catch (Exception error) {
+                }
+                catch (Exception error) {
                     Toast.makeText(getActivity(), genError, Toast.LENGTH_SHORT).show();
                 }
             }
