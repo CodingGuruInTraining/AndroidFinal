@@ -69,6 +69,6 @@ public class Book {
 
     public void add_hours_for_week(float hours) {
         // TODO determine which week it currently is
-        // TODO add hours to that week in arraylist
+        // TODO add hours to that week in arraylist  --  hours_spent_per_week[3] = 42
     }
 }

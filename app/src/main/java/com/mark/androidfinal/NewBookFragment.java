@@ -18,6 +18,8 @@ public class NewBookFragment extends Fragment {
 
     private NewBookListener mNewBookListener;
     private String emptyField = "Please fill in all fields";
+    private String parseError = "Error converting number";
+    private String genError = "Unknown error occurred";
 
     @Override
     public void onAttach(Context context) {
@@ -41,15 +43,21 @@ public class NewBookFragment extends Fragment {
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String name = nameEditText.getText().toString();
-                String reader = readerEditText.getText().toString();
-                String pagesStr = pagesEditText.getText().toString();
+                try {
+                    String name = nameEditText.getText().toString();
+                    String reader = readerEditText.getText().toString();
+                    String pagesStr = pagesEditText.getText().toString();
 
-                if (name.equals("") || reader.equals("") || pagesStr.equals("")) {
-                    Toast.makeText(getActivity(), emptyField, Toast.LENGTH_SHORT).show();
-                } else {
-                    int pages = Integer.parseInt(pagesStr);
-                    mNewBookListener.newBookData(name, reader, pages);
+                    if (name.equals("") || reader.equals("") || pagesStr.equals("")) {
+                        Toast.makeText(getActivity(), emptyField, Toast.LENGTH_SHORT).show();
+                    } else {
+                        int pages = Integer.parseInt(pagesStr);
+                        mNewBookListener.newBookData(name, reader, pages);
+                    }
+                } catch (NumberFormatException error) {
+                    Toast.makeText(getActivity(), parseError, Toast.LENGTH_SHORT).show();
+                } catch (Exception error) {
+                    Toast.makeText(getActivity(), genError, Toast.LENGTH_SHORT).show();
                 }
             }
         });
