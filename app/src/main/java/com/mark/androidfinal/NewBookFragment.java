@@ -18,9 +18,9 @@ public class NewBookFragment extends Fragment {
 
     private NewBookListener mNewBookListener;
     // Error strings.
-    private String emptyField = getString(R.string.empty_field_msg);
-    private String parseError = getString(R.string.parse_error_msg);
-    private String genError = getString(R.string.general_error_msg);
+    private String emptyField;
+    private String parseError;
+    private String genError;
 
     @Override
     public void onAttach(Context context) {
@@ -36,6 +36,11 @@ public class NewBookFragment extends Fragment {
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflates View.
         View view = inflater.inflate(R.layout.fragment_new_book, container, false);
+
+        // Gets string resources.
+        emptyField = getString(R.string.empty_field_msg);
+        parseError = getString(R.string.parse_error_msg);
+        genError = getString(R.string.general_error_msg);
 
         // Sets up widgets.
         final EditText nameEditText = (EditText) view.findViewById(R.id.new_book_name);
@@ -79,7 +84,10 @@ public class NewBookFragment extends Fragment {
 
 
 
-
+    // newInstance function.
+    public static NewBookFragment newInstance() {
+        return new NewBookFragment();
+    }
 
 
     public interface NewBookListener {

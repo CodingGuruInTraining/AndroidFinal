@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 //                    mTextMessage.setText(R.string.title_home);
 //                    return true;
                 case R.id.navigation_dashboard: // Maybe add new book?
-                    fragment = new NewBookFragment();
+                    fragment = NewBookFragment.newInstance();
 //                    mTextMessage.setText(R.string.title_dashboard);
 //                    return true;
                 case R.id.navigation_notifications: // Maybe update existing book?
