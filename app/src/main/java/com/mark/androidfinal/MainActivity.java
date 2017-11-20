@@ -27,13 +27,18 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
             // TODO refactor names and text once decided on
             switch (item.getItemId()) {
                 case R.id.navigation_home:      // Maybe view all books in database?
+                    fragment = BookListFragment.newInstance();
+                    break;
 //                    mTextMessage.setText(R.string.title_home);
 //                    return true;
                 case R.id.navigation_dashboard: // Maybe add new book?
                     fragment = NewBookFragment.newInstance();
+                    break;
 //                    mTextMessage.setText(R.string.title_dashboard);
 //                    return true;
                 case R.id.navigation_notifications: // Maybe update existing book?
+
+                    break;
 //                    mTextMessage.setText(R.string.title_notifications);
 //                    return true;
             }
