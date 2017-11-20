@@ -9,7 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements NewBookFragment.NewBookListener {
 
 
 
@@ -54,4 +54,11 @@ public class MainActivity extends AppCompatActivity {
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
     }
 
+    @Override
+    public void newBookData(String name, String reader, int pages) {
+        // TODO create new Book
+        // TODO add Book to list or database somewhere
+        // TODO update ArrayAdapter if using one for full list of books
+        // TODO replace fragment to something else
+    }
 }
