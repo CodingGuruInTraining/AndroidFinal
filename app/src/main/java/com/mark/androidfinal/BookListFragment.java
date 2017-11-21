@@ -34,8 +34,8 @@ public class BookListFragment extends Fragment{
 
 
         // TODO  set up adapter class, then come back and try this:
-//        ArrayList<Book> bookList = getArguments().getParcelableArrayList(BOOK_LIST_ARGS);
-//        mBookListAdapter = new BookListAdapter(getActivity(), bookList);
+        ArrayList<Book> bookList = getArguments().getParcelableArrayList(BOOK_LIST_ARGS);
+        mBookListAdapter = new BookListAdapter(getActivity(), bookList);
 
 
 
