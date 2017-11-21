@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
             switch (item.getItemId()) {
                 case R.id.navigation_home:      // Maybe view all books in database?
                     fragment = BookListFragment.newInstance();
+                // TODO attach query results to fragment
                     break;
 //                    mTextMessage.setText(R.string.title_home);
 //                    return true;
@@ -60,9 +61,16 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // TODO do you need a FragmentPagerAdapter???
+
         // Sets up nav bar.
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+
+        // TODO try following link to keep nav bar visible with other fragments:
+        // http://blog.iamsuleiman.com/using-bottom-navigation-view-android-design-support-library/
+
+        // TODO setup firebase database
     }
 
     // Returning function/call from NewBookFragment.
@@ -73,5 +81,13 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         // TODO add Book to list or database somewhere
         // TODO update ArrayAdapter if using one for full list of books
         // TODO replace fragment to something else
+    }
+
+    private void saveNewBook(Book newBook) {
+        // TODO save to firebase
+    }
+
+    private void queryAllBooks() {
+        // TODO select all from firebase for book list
     }
 }
