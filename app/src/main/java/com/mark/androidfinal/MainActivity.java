@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 public class MainActivity extends AppCompatActivity implements NewBookFragment.NewBookListener {
 
+    protected static final String NAV_KEY = "navigation menu";
 
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -45,7 +46,9 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
             // Checks if the fragment was set to anything (a button was pressed).
             if (fragment != null) {
                 // Replaces current fragment with indicated one.
-                fm.beginTransaction().replace(R.id.main_container, fragment).commit();
+                fm.beginTransaction().replace(R.id.main_container, fragment);
+//                fm.beginTransaction().add(R.menu.navigation, NAV_KEY);
+                fm.beginTransaction().commit();
                 return true;
             }
             return false;
