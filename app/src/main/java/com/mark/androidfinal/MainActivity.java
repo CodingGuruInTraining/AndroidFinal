@@ -6,13 +6,28 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements NewBookFragment.NewBookListener {
 
     protected static final String NAV_KEY = "navigation menu";
+    protected static final String ALL_BOOKS_KEY = "all_books";
 
+    private static final String TAG = "debugger extraordinaire";
+
+    private DatabaseReference mDatabaseReference;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -51,8 +66,9 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 //                fm.beginTransaction().add(R.menu.navigation, NAV_KEY);
                 fm.beginTransaction().commit();
                 return true;
+            } else {
+                return false;
             }
-            return false;
         }
     };
 
@@ -71,6 +87,9 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         // http://blog.iamsuleiman.com/using-bottom-navigation-view-android-design-support-library/
 
         // TODO setup firebase database
+        FirebaseDatabase db = FirebaseDatabase.getInstance();
+        DatabaseReference dbReference = db.getReference();
+        mDatabaseReference = dbReference.child(ALL_BOOKS_KEY);
     }
 
     // Returning function/call from NewBookFragment.
@@ -78,16 +97,64 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
     public void newBookData(String name, String reader, int pages) {
         // Creates new Book object.
         Book newBook = new Book(name, reader, pages);
-        // TODO add Book to list or database somewhere
+        // New Book object is added to Firebase.
+        saveNewBook(newBook);
         // TODO update ArrayAdapter if using one for full list of books
         // TODO replace fragment to something else
     }
 
     private void saveNewBook(Book newBook) {
-        // TODO save to firebase
+        // Saving Book to database.
+        // Creates a new child reference of global DatabaseReference.
+        DatabaseReference newReference = mDatabaseReference.push();
+
+        // Set the value of new child reference to the passed Book object.
+        newReference.setValue(newBook);
     }
 
     private void queryAllBooks() {
-        // TODO select all from firebase for book list
+        // Queries the database for all entries.
+
+        mDatabaseReference.orderByChild("book_name").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "ALL DB ENTRIES: " + dataSnapshot.toString());
+
+                ArrayList<Book> allBooks = new ArrayList<Book>();
+
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    Book book = childSnapshot.getValue(Book.class);
+                    allBooks.add(book);
+                }
+
+                // TODO Deliver allBooks somewhere for processing
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "Firebase Error fetching all entries", databaseError.toException());
+            }
+        });
+    }
+
+    private void searchForBooks(String bookName) {
+        mDatabaseReference.orderByChild("book_name").equalTo(bookName).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+
+                ArrayList<Book> matches = new ArrayList<Book>();
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    Book book = childSnapshot.getValue(Book.class);
+                    matches.add(book);
+                }
+
+                // TODO Deliver ArrayList of results for processing
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "Firebase Error searching entries", databaseError.toException());
+            }
+        });
     }
 }

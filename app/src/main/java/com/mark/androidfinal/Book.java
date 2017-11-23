@@ -10,7 +10,7 @@ import java.util.Date;
  * This Class outlines a Book object and the attributes it contains.
  */
 
-public class Book implements Parcelable{
+public class Book {
     // Attributes of Book objects.
     private String book_name;
     private String reader;
@@ -20,6 +20,9 @@ public class Book implements Parcelable{
     private int pages_read;
     private ArrayList<Float> hours_spent_per_week;
     private boolean completed;
+
+    Book() {
+    }
 
     // Constructor.
     public Book(String book_name, String reader, int total_pages) {
@@ -78,23 +81,23 @@ public class Book implements Parcelable{
     }
 
 
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeString(book_name);
-        parcel.writeString(reader);
-        parcel.writeParcelable((Parcelable)start_date, flags);
-        parcel.writeParcelable((Parcelable)end_date, flags);
-        parcel.writeInt(total_pages);
-        parcel.writeInt(pages_read);
-        // TODO figure out how to parse arraylist
-//        parcel.writeDoubleArray((double[])hours_spent_per_week);
-        parcel.writeInt(completed ? 1 : 0);
-//        parcel.writeBooleanArray(new boolean[] {completed});
-
-    }
+//    @Override
+//    public int describeContents() {
+//        return 0;
+//    }
+//
+//    @Override
+//    public void writeToParcel(Parcel parcel, int flags) {
+//        parcel.writeString(book_name);
+//        parcel.writeString(reader);
+//        parcel.writeParcelable((Parcelable)start_date, flags);
+//        parcel.writeParcelable((Parcelable)end_date, flags);
+//        parcel.writeInt(total_pages);
+//        parcel.writeInt(pages_read);
+//        // TODO figure out how to parse arraylist
+////        parcel.writeDoubleArray((double[])hours_spent_per_week);
+//        parcel.writeInt(completed ? 1 : 0);
+////        parcel.writeBooleanArray(new boolean[] {completed});
+//
+//    }
 }
