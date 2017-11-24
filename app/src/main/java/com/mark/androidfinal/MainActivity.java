@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
@@ -28,6 +29,9 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
     private static final String TAG = "debugger extraordinaire";
 
     private DatabaseReference mDatabaseReference;
+    private ArrayList<Book> mBookArrayList;
+
+//    private SendQueryListener mSendQueryListener;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
             = new BottomNavigationView.OnNavigationItemSelectedListener() {
@@ -38,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
             // in the switch.
             Fragment fragment = new Fragment();
             FragmentManager fm = getSupportFragmentManager();
+            FragmentTransaction ft = fm.beginTransaction();
+            Bundle bundle = new Bundle();
 
             // Switch statement to determine which nav bar button was pressed.
             // TODO refactor names and text once decided on
@@ -45,6 +51,12 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                 case R.id.navigation_home:      // Maybe view all books in database?
                     fragment = BookListFragment.newInstance();
                 // TODO attach query results to fragment
+                    queryAllBooks();
+                    bundle.putParcelableArrayList(ALL_BOOKS_KEY, mBookArrayList);
+
+//                    fragment.setAllBooksList(mBookArrayList);
+//                    bundle.putarr
+//                    fragment.setArguments();
                     break;
 //                    mTextMessage.setText(R.string.title_home);
 //                    return true;
@@ -61,13 +73,14 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
             }
             // Checks if the fragment was set to anything (a button was pressed).
             if (fragment != null) {
+                fragment.setArguments(bundle);
                 // Replaces current fragment with indicated one.
-                fm.beginTransaction().replace(R.id.main_container, fragment);
+                ft.replace(R.id.main_container, fragment).commit();
 //                fm.beginTransaction().add(R.menu.navigation, NAV_KEY);
-                fm.beginTransaction().commit();
+//                fm.beginTransaction().commit();
                 return true;
             } else {
-                return false;
+                return true;
             }
         }
     };
@@ -99,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         Book newBook = new Book(name, reader, pages);
         // New Book object is added to Firebase.
         saveNewBook(newBook);
+        // TODO maybe load a "home" fragment instead
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, BookListFragment.newInstance()).commit();
         // TODO update ArrayAdapter if using one for full list of books
         // TODO replace fragment to something else
     }
@@ -128,6 +143,7 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                 }
 
                 // TODO Deliver allBooks somewhere for processing
+                mBookArrayList = allBooks;
             }
 
             @Override
@@ -135,6 +151,7 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                 Log.e(TAG, "Firebase Error fetching all entries", databaseError.toException());
             }
         });
+
     }
 
     private void searchForBooks(String bookName) {
@@ -157,4 +174,20 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
             }
         });
     }
+
+//    @Override
+//    public void requestAllQuery(boolean yesPlease) {
+//        queryAllBooks();
+//        mSendQueryListener.allQueryResults(mBookArrayList);
+//    }
+//
+//    public interface SendQueryListener {
+//        void allQueryResults(ArrayList<Book> allBooks);
+//    }
 }
+
+
+
+
+// References:
+// parcing class - http://www.parcelabler.com/

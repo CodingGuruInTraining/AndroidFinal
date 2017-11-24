@@ -10,7 +10,7 @@ import java.util.Date;
  * This Class outlines a Book object and the attributes it contains.
  */
 
-public class Book {
+public class Book implements Parcelable {
     // Attributes of Book objects.
     private String book_name;
     private String reader;
@@ -79,6 +79,61 @@ public class Book {
         // TODO determine which week it currently is
         // TODO add hours to that week in arraylist  --  hours_spent_per_week[3] = 42
     }
+
+
+    protected Book(Parcel in) {
+        book_name = in.readString();
+        reader = in.readString();
+        long tmpStart_date = in.readLong();
+        start_date = tmpStart_date != -1 ? new Date(tmpStart_date) : null;
+        long tmpEnd_date = in.readLong();
+        end_date = tmpEnd_date != -1 ? new Date(tmpEnd_date) : null;
+        total_pages = in.readInt();
+        pages_read = in.readInt();
+        if (in.readByte() == 0x01) {
+            hours_spent_per_week = new ArrayList<Float>();
+            in.readList(hours_spent_per_week, Float.class.getClassLoader());
+        } else {
+            hours_spent_per_week = null;
+        }
+        completed = in.readByte() != 0x00;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(book_name);
+        dest.writeString(reader);
+        dest.writeLong(start_date != null ? start_date.getTime() : -1L);
+        dest.writeLong(end_date != null ? end_date.getTime() : -1L);
+        dest.writeInt(total_pages);
+        dest.writeInt(pages_read);
+        if (hours_spent_per_week == null) {
+            dest.writeByte((byte) (0x00));
+        } else {
+            dest.writeByte((byte) (0x01));
+            dest.writeList(hours_spent_per_week);
+        }
+        dest.writeByte((byte) (completed ? 0x01 : 0x00));
+    }
+
+    @SuppressWarnings("unused")
+    public static final Parcelable.Creator<Book> CREATOR = new Parcelable.Creator<Book>() {
+        @Override
+        public Book createFromParcel(Parcel in) {
+            return new Book(in);
+        }
+
+        @Override
+        public Book[] newArray(int size) {
+            return new Book[size];
+        }
+    };
 
 
 //    @Override
