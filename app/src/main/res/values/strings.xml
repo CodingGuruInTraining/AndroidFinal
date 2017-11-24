@@ -13,4 +13,8 @@
     <string name="empty_field_msg">Please fill in all fields</string>
     <string name="parse_error_msg">Error converting number</string>
     <string name="general_error_msg">Unknown error occurred</string>
+    <string name="view_pages_read_label">Pages Read:</string>
+    <string name="view_date_start_label">Start Date:</string>
+    <string name="view_update_button">Update</string>
+    <string name="view_cancel_button">Cancel</string>
 </resources>

@@ -35,11 +35,6 @@ public class BookListFragment extends Fragment {
         ListView bookListView = (ListView) view.findViewById(R.id.book_list);
 
 
-
-        // TODO  set up adapter class, then come back and try this:
-        // TODO if there is time, try making Book Class parcelable and then send in bundle
-//        ArrayList<Book> bookList = getArguments().getParcelableArrayList(BOOK_LIST_ARGS);
-
         allBooksList = getArguments().getParcelableArrayList(MainActivity.ALL_BOOKS_KEY);
 
 //        mRequestQueryListener.requestAllQuery(true);

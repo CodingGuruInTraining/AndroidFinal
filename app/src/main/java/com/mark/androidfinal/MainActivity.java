@@ -50,21 +50,12 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
             switch (item.getItemId()) {
                 case R.id.navigation_home:      // Maybe view all books in database?
                     fragment = BookListFragment.newInstance();
-                // TODO attach query results to fragment
                     queryAllBooks();
                     bundle.putParcelableArrayList(ALL_BOOKS_KEY, mBookArrayList);
-
-//                    fragment.setAllBooksList(mBookArrayList);
-//                    bundle.putarr
-//                    fragment.setArguments();
                     break;
-//                    mTextMessage.setText(R.string.title_home);
-//                    return true;
                 case R.id.navigation_dashboard: // Maybe add new book?
                     fragment = NewBookFragment.newInstance();
                     break;
-//                    mTextMessage.setText(R.string.title_dashboard);
-//                    return true;
                 case R.id.navigation_notifications: // Maybe update existing book?
 
                     break;
@@ -76,8 +67,6 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                 fragment.setArguments(bundle);
                 // Replaces current fragment with indicated one.
                 ft.replace(R.id.main_container, fragment).commit();
-//                fm.beginTransaction().add(R.menu.navigation, NAV_KEY);
-//                fm.beginTransaction().commit();
                 return true;
             } else {
                 return true;
@@ -99,7 +88,7 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         // TODO try following link to keep nav bar visible with other fragments:
         // http://blog.iamsuleiman.com/using-bottom-navigation-view-android-design-support-library/
 
-        // TODO setup firebase database
+
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference dbReference = db.getReference();
         mDatabaseReference = dbReference.child(ALL_BOOKS_KEY);
@@ -115,7 +104,6 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         // TODO maybe load a "home" fragment instead
         getSupportFragmentManager().beginTransaction().replace(R.id.main_container, BookListFragment.newInstance()).commit();
         // TODO update ArrayAdapter if using one for full list of books
-        // TODO replace fragment to something else
     }
 
     private void saveNewBook(Book newBook) {
@@ -141,8 +129,6 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                     Book book = childSnapshot.getValue(Book.class);
                     allBooks.add(book);
                 }
-
-                // TODO Deliver allBooks somewhere for processing
                 mBookArrayList = allBooks;
             }
 
@@ -174,16 +160,6 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
             }
         });
     }
-
-//    @Override
-//    public void requestAllQuery(boolean yesPlease) {
-//        queryAllBooks();
-//        mSendQueryListener.allQueryResults(mBookArrayList);
-//    }
-//
-//    public interface SendQueryListener {
-//        void allQueryResults(ArrayList<Book> allBooks);
-//    }
 }
 
 
