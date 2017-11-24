@@ -28,4 +28,8 @@ public class ViewBookFragment extends Fragment {
 
         return view;
     }
+
+    public static ViewBookFragment newInstance() {
+        return new ViewBookFragment();
+    }
 }

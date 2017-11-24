@@ -21,10 +21,11 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class MainActivity extends AppCompatActivity implements NewBookFragment.NewBookListener {
+public class MainActivity extends AppCompatActivity implements NewBookFragment.NewBookListener, BookListFragment.ClickedBookListener {
 
     protected static final String NAV_KEY = "navigation menu";
     protected static final String ALL_BOOKS_KEY = "all_books";
+    protected static final String BOOK_KEY = "one_book_to_rule_them_all";
 
     private static final String TAG = "debugger extraordinaire";
 
@@ -159,6 +160,14 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                 Log.e(TAG, "Firebase Error searching entries", databaseError.toException());
             }
         });
+    }
+
+    @Override
+    public void openClickedBook(Bundle bundle) {
+//        Book clickedBook = bundle.getParcelable(BOOK_KEY);
+        ViewBookFragment fragment = ViewBookFragment.newInstance();
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, fragment).commit();
     }
 }
 

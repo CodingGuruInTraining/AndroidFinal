@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -22,10 +23,16 @@ public class BookListFragment extends Fragment {
     protected static ArrayList<Book> allBooksList;
 
 //    private RequestQueryListener mRequestQueryListener;
+    private ClickedBookListener mClickedBookListener;
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (context instanceof ClickedBookListener) {
+            mClickedBookListener = (ClickedBookListener) context;
+        } else {
+            throw new RuntimeException(context.toString() + " must implement ClickedBookListener");
+        }
     }
 
     @Override
@@ -43,6 +50,15 @@ public class BookListFragment extends Fragment {
         mBookListAdapter = new BookListAdapter(getActivity(), allBooksList);
         bookListView.setAdapter(mBookListAdapter);
 
+        bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Book clickedBook = (Book) adapterView.getItemAtPosition(position);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable(MainActivity.BOOK_KEY, clickedBook);
+                mClickedBookListener.openClickedBook(bundle);
+            }
+        });
 
         return view;
     }
@@ -56,6 +72,10 @@ public class BookListFragment extends Fragment {
 //    public interface RequestQueryListener {
 //        void requestAllQuery(boolean yesPlease);
 //    }
+
+    public interface ClickedBookListener {
+        void openClickedBook(Bundle bundle);
+    }
 
     public static BookListFragment newInstance() {
         return new BookListFragment();
