@@ -13,6 +13,7 @@ import java.util.Date;
 public class Book implements Parcelable {
     //TODO add an ID or KEY attribute for easier queries. Probably will need to destroy DB.
     // Attributes of Book objects.
+    private String uniqueId;
     private String book_name;
     private String reader;
     private Date start_date;
@@ -81,8 +82,16 @@ public class Book implements Parcelable {
         // TODO add hours to that week in arraylist  --  hours_spent_per_week[3] = 42
     }
 
+    public String getUniqueId() {
+        return uniqueId;
+    }
+
+    public void setUniqueId(String uniqueId) {
+        this.uniqueId = uniqueId;
+    }
 
     protected Book(Parcel in) {
+        uniqueId = in.readString();
         book_name = in.readString();
         reader = in.readString();
         long tmpStart_date = in.readLong();
@@ -108,6 +117,7 @@ public class Book implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(uniqueId);
         dest.writeString(book_name);
         dest.writeString(reader);
         dest.writeLong(start_date != null ? start_date.getTime() : -1L);
@@ -135,25 +145,4 @@ public class Book implements Parcelable {
             return new Book[size];
         }
     };
-
-
-//    @Override
-//    public int describeContents() {
-//        return 0;
-//    }
-//
-//    @Override
-//    public void writeToParcel(Parcel parcel, int flags) {
-//        parcel.writeString(book_name);
-//        parcel.writeString(reader);
-//        parcel.writeParcelable((Parcelable)start_date, flags);
-//        parcel.writeParcelable((Parcelable)end_date, flags);
-//        parcel.writeInt(total_pages);
-//        parcel.writeInt(pages_read);
-//        // TODO figure out how to parse arraylist
-////        parcel.writeDoubleArray((double[])hours_spent_per_week);
-//        parcel.writeInt(completed ? 1 : 0);
-////        parcel.writeBooleanArray(new boolean[] {completed});
-//
-//    }
 }

@@ -137,8 +137,12 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         // New Book object is added to Firebase.
         saveNewBook(newBook);
         // TODO maybe load a "home" fragment instead
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, BookListFragment.newInstance()).commit();
-        // TODO update ArrayAdapter if using one for full list of books
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        BookListFragment fragment = BookListFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(ALL_BOOKS_KEY, mBookArrayList);
+        ft.replace(R.id.main_container, fragment).commit();
     }
 
     private void saveNewBook(Book newBook) {
@@ -146,8 +150,12 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         // Creates a new child reference of global DatabaseReference.
         DatabaseReference newReference = mDatabaseReference.push();
 
+        String uniqueId = newReference.getKey();
+        newBook.setUniqueId(uniqueId);
+
         // Set the value of new child reference to the passed Book object.
         newReference.setValue(newBook);
+        queryAllBooks();
     }
 
     private void queryAllBooks() {
