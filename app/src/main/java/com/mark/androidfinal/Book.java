@@ -11,7 +11,6 @@ import java.util.Date;
  */
 
 public class Book implements Parcelable {
-    //TODO add an ID or KEY attribute for easier queries. Probably will need to destroy DB.
     // Attributes of Book objects.
     private String uniqueId;
     private String book_name;

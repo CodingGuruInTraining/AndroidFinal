@@ -19,4 +19,5 @@
     <string name="view_cancel_button">Cancel</string>
     <string name="dialog_update_text">How many pages have you read since your last update?</string>
     <string name="dialog_update_hint">Pages...</string>
+    <string name="main_page">Let\'s Read Some Books!</string>
 </resources>

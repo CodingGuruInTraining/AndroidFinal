@@ -19,7 +19,7 @@
     <TextView
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="@string/new_book_pages_textview"/>
+        android:text="@string/view_pages_read_label"/>
     </TableRow>
     <TableRow>
 

@@ -49,6 +49,7 @@ public class BookListFragment extends Fragment {
 
         mBookListAdapter = new BookListAdapter(getActivity(), allBooksList);
         bookListView.setAdapter(mBookListAdapter);
+        mBookListAdapter.notifyDataSetChanged();
 
         bookListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

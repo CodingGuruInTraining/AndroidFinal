@@ -10,6 +10,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +43,9 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
     ValueEventListener queryListener;
     private List<Fragment> fragmentList = new ArrayList<Fragment>();
 
+    private boolean mainActive;
+    private TextView mainTextView;
+
 //    private SendQueryListener mSendQueryListener;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
@@ -67,9 +71,9 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                 case R.id.navigation_dashboard: // Maybe add new book?
                     fragment = NewBookFragment.newInstance();
                     break;
-                case R.id.navigation_notifications: // Maybe update existing book?
-
-                    break;
+//                case R.id.navigation_notifications: // Maybe update existing book?
+//
+//                    break;
 //                    mTextMessage.setText(R.string.title_notifications);
 //                    return true;
                 default:
@@ -81,6 +85,8 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                 fragment.setArguments(bundle);
                 // Replaces current fragment with indicated one.
                 ft.replace(R.id.main_container, fragment).commit();
+
+                loadMainPage();
                 return true;
             }
             return false;
@@ -96,6 +102,9 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         // TODO do you need a FragmentPagerAdapter???
 
 //        buildFragmentList();
+
+        mainActive = true;
+        mainTextView = (TextView) findViewById(R.id.main_welcome);
 
         // Sets up nav bar.
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -136,13 +145,15 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         Book newBook = new Book(name, reader, pages);
         // New Book object is added to Firebase.
         saveNewBook(newBook);
-        // TODO maybe load a "home" fragment instead
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction ft = fm.beginTransaction();
-        BookListFragment fragment = BookListFragment.newInstance();
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(ALL_BOOKS_KEY, mBookArrayList);
-        ft.replace(R.id.main_container, fragment).commit();
+        Toast.makeText(MainActivity.this, "Book added", Toast.LENGTH_SHORT).show();
+        loadMainPage();
+//        loadBookList();
+//        FragmentManager fm = getSupportFragmentManager();
+//        FragmentTransaction ft = fm.beginTransaction();
+//        BookListFragment fragment = BookListFragment.newInstance();
+//        Bundle bundle = new Bundle();
+//        bundle.putParcelableArrayList(ALL_BOOKS_KEY, mBookArrayList);
+//        ft.replace(R.id.main_container, fragment).commit();
     }
 
     private void saveNewBook(Book newBook) {
@@ -155,13 +166,13 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 
         // Set the value of new child reference to the passed Book object.
         newReference.setValue(newBook);
-        queryAllBooks();
+        mBookArrayList.add(newBook);
+//        queryAllBooks();
     }
 
     private void queryAllBooks() {
         // Queries the database for all entries.
-// TODO need Query object???
-        mDatabaseReference.orderByChild("book_name").addListenerForSingleValueEvent(new ValueEventListener() {
+        mDatabaseReference.orderByChild("pages_read").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 Log.d(TAG, "ALL DB ENTRIES: " + dataSnapshot.toString());
@@ -224,12 +235,27 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
     public void updatePages(Bundle bundle) {
         Book book = bundle.getParcelable(BOOK_KEY);
         int pages = bundle.getInt(PAGES_KEY);
+        String bookId = book.getUniqueId();
 
         try {
-            long startDate = book.getStart_date().getTime();
+//            long startDate = book.getStart_date().getTime();
 //            mDatabaseReference.child("start_date").child("time").equalTo(startDate).set
-
-
+            int prevPages = book.getPages_read();
+            int newTotal = prevPages + pages;
+            if (newTotal <= book.getTotal_pages()) {
+                mDatabaseReference.child(bookId).child("pages_read").setValue(pages + prevPages);
+                Toast.makeText(MainActivity.this, "Update Successful", Toast.LENGTH_SHORT).show();
+                for (Book x : mBookArrayList) {
+                    if (x.getUniqueId().equals(bookId)) {
+                        x.setPages_read(newTotal);
+                        break;
+                    }
+                }
+//            loadBookList();
+                loadMainPage();
+            } else {
+                Toast.makeText(MainActivity.this, "Can't read more than the total", Toast.LENGTH_SHORT).show();
+            }
 
         } catch (NullPointerException er) {
             er.fillInStackTrace();
@@ -237,6 +263,29 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         }
     }
 
+
+    private void loadBookList() {
+        queryAllBooks();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        BookListFragment fragment = BookListFragment.newInstance();
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(ALL_BOOKS_KEY, mBookArrayList);
+        ft.replace(R.id.main_container, fragment).commit();
+    }
+
+
+    private void loadMainPage() {
+        if (mainActive) {
+            mainTextView.setVisibility(View.GONE);
+            mainActive = false;
+        } else {
+            mainTextView.setVisibility(View.VISIBLE);
+            mainActive = true;
+            getSupportFragmentManager().beginTransaction().replace(R.id.main_container, new HomeFragment()).commit();
+        }
+
+    }
 
 //    private void switchFragments(int position) {
 //        getSupportFragmentManager()
@@ -264,4 +313,5 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 // parcing class - http://www.parcelabler.com/
 // column spacing - https://stackoverflow.com/questions/1666685/android-stretch-columns-evenly-in-a-tablelayout
 // fragment managing strategy - http://blog.iamsuleiman.com/using-bottom-navigation-view-android-design-support-library/
+// simple update statement - https://stackoverflow.com/questions/33315353/update-specific-keys-using-firebase-for-android
 

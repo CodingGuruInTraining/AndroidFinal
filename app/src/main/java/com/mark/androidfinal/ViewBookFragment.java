@@ -80,6 +80,7 @@ public class ViewBookFragment extends Fragment {
                         dialog.dismiss();
                     }
                 });
+                dialog.show();
             }
         });
 
@@ -89,6 +90,8 @@ public class ViewBookFragment extends Fragment {
 
             }
         });
+
+
 
 
         return view;

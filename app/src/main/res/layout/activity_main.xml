@@ -6,8 +6,18 @@
     android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.mark.androidfinal.MainActivity">
+    tools:context="com.mark.androidfinal.MainActivity"
+    android:layout_margin="10dp">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:textSize="40dp"
+        android:text="@string/main_page"
+        android:id="@+id/main_welcome"
+        android:gravity="top"
+        android:layout_margin="10dp"/>
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -15,6 +25,9 @@
         android:id="@+id/main_container"
         android:layout_alignParentBottom="true"
         >
+
+
+
         <android.support.design.widget.BottomNavigationView
             android:id="@+id/navigation"
             android:layout_width="match_parent"
