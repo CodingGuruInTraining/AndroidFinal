@@ -68,6 +68,9 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                     break;
 //                    mTextMessage.setText(R.string.title_notifications);
 //                    return true;
+                default:
+//                    fragment = BookListFragment.newInstance();
+                    break;
             }
             // Checks if the fragment was set to anything (a button was pressed).
             if (fragment != null) {
@@ -75,9 +78,9 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                 // Replaces current fragment with indicated one.
                 ft.replace(R.id.main_container, fragment).commit();
                 return true;
-            } else {
-                return false;
             }
+            return false;
+
         }
     };
 
@@ -88,7 +91,7 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 
         // TODO do you need a FragmentPagerAdapter???
 
-        buildFragmentList();
+//        buildFragmentList();
 
         // Sets up nav bar.
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
@@ -193,9 +196,16 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
     @Override
     public void openClickedBook(Bundle bundle) {
 //        Book clickedBook = bundle.getParcelable(BOOK_KEY);
+
+//        switchFragments(2);
+
         ViewBookFragment fragment = ViewBookFragment.newInstance();
         fragment.setArguments(bundle);
-        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, fragment).commit();
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction ft = fm.beginTransaction();
+        ft.replace(R.id.main_container, fragment);
+        ft.commit();
+//        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, fragment).commit();
     }
 
 
