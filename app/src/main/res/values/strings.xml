@@ -17,4 +17,6 @@
     <string name="view_date_start_label">Start Date:</string>
     <string name="view_update_button">Update</string>
     <string name="view_cancel_button">Cancel</string>
+    <string name="dialog_update_text">How many pages have you read since your last update?</string>
+    <string name="dialog_update_hint">Pages...</string>
 </resources>

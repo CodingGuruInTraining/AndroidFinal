@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -21,14 +22,17 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity implements NewBookFragment.NewBookListener, BookListFragment.ClickedBookListener {
+public class MainActivity extends AppCompatActivity implements NewBookFragment.NewBookListener,
+        BookListFragment.ClickedBookListener, ViewBookFragment.ViewBookListener {
 
     protected static final String NAV_KEY = "navigation menu";
     protected static final String ALL_BOOKS_KEY = "all_books";
     protected static final String BOOK_KEY = "one_book_to_rule_them_all";
+    protected static final String PAGES_KEY = "updating_pages";
 
     private static final String TAG = "debugger extraordinaire";
 
@@ -208,26 +212,40 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 //        getSupportFragmentManager().beginTransaction().replace(R.id.main_container, fragment).commit();
     }
 
+    @Override
+    public void updatePages(Bundle bundle) {
+        Book book = bundle.getParcelable(BOOK_KEY);
+        int pages = bundle.getInt(PAGES_KEY);
+
+        try {
+            long startDate = book.getStart_date().getTime();
+//            mDatabaseReference.child("start_date").child("time").equalTo(startDate).set
 
 
 
-
-    private void switchFragments(int position) {
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.main_container, fragmentList.get(position))
-                .commit();
+        } catch (NullPointerException er) {
+            er.fillInStackTrace();
+            Toast.makeText(MainActivity.this, "Can't locate book", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void buildFragmentList() {
-        BookListFragment bookListFragment = BookListFragment.newInstance();
-        NewBookFragment newBookFragment = NewBookFragment.newInstance();
-        ViewBookFragment viewBookFragment = ViewBookFragment.newInstance();
 
-        fragmentList.add(bookListFragment);
-        fragmentList.add(newBookFragment);
-        fragmentList.add(viewBookFragment);
-    }
+//    private void switchFragments(int position) {
+//        getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.main_container, fragmentList.get(position))
+//                .commit();
+//    }
+//
+//    private void buildFragmentList() {
+//        BookListFragment bookListFragment = BookListFragment.newInstance();
+//        NewBookFragment newBookFragment = NewBookFragment.newInstance();
+//        ViewBookFragment viewBookFragment = ViewBookFragment.newInstance();
+//
+//        fragmentList.add(bookListFragment);
+//        fragmentList.add(newBookFragment);
+//        fragmentList.add(viewBookFragment);
+//    }
 
 }
 
