@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -16,10 +17,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements NewBookFragment.NewBookListener, BookListFragment.ClickedBookListener {
 
@@ -31,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 
     private DatabaseReference mDatabaseReference;
     private ArrayList<Book> mBookArrayList;
+    Query allQuery;
+    ValueEventListener queryListener;
+    private List<Fragment> fragmentList = new ArrayList<Fragment>();
 
 //    private SendQueryListener mSendQueryListener;
 
@@ -51,7 +57,7 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
             switch (item.getItemId()) {
                 case R.id.navigation_home:      // Maybe view all books in database?
                     fragment = BookListFragment.newInstance();
-                    queryAllBooks();
+//                    queryAllBooks();
                     bundle.putParcelableArrayList(ALL_BOOKS_KEY, mBookArrayList);
                     break;
                 case R.id.navigation_dashboard: // Maybe add new book?
@@ -70,7 +76,7 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                 ft.replace(R.id.main_container, fragment).commit();
                 return true;
             } else {
-                return true;
+                return false;
             }
         }
     };
@@ -82,18 +88,39 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 
         // TODO do you need a FragmentPagerAdapter???
 
+        buildFragmentList();
+
         // Sets up nav bar.
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
-        // TODO try following link to keep nav bar visible with other fragments:
-        // http://blog.iamsuleiman.com/using-bottom-navigation-view-android-design-support-library/
+
 
 
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference dbReference = db.getReference();
         mDatabaseReference = dbReference.child(ALL_BOOKS_KEY);
+        allQuery = mDatabaseReference.orderByChild("book_name");
+        queryAllBooks();
+
+//        FragmentManager fm = getSupportFragmentManager();
+//        FragmentTransaction ft = fm.beginTransaction();
+//        ft.add(R.id.main_container, BookListFragment.newInstance());
+//        ft.commit();
+//        getSupportFragmentManager().beginTransaction().add(R.id.main_container, BookListFragment.newInstance()).commit();
+
+
+//        switchFragments(0);
     }
+
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//        FragmentManager fm = getSupportFragmentManager();
+//        FragmentTransaction ft = fm.beginTransaction();
+//        ft.add(R.id.main_container, BookListFragment.newInstance());
+//        ft.commit();
+//    }
 
     // Returning function/call from NewBookFragment.
     @Override
@@ -118,7 +145,7 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 
     private void queryAllBooks() {
         // Queries the database for all entries.
-
+// TODO need Query object???
         mDatabaseReference.orderByChild("book_name").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -128,6 +155,7 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
                     Book book = childSnapshot.getValue(Book.class);
+//                    Book book = (Book) childSnapshot.getValue();
                     allBooks.add(book);
                 }
                 mBookArrayList = allBooks;
@@ -169,6 +197,28 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         fragment.setArguments(bundle);
         getSupportFragmentManager().beginTransaction().replace(R.id.main_container, fragment).commit();
     }
+
+
+
+
+
+    private void switchFragments(int position) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.main_container, fragmentList.get(position))
+                .commit();
+    }
+
+    private void buildFragmentList() {
+        BookListFragment bookListFragment = BookListFragment.newInstance();
+        NewBookFragment newBookFragment = NewBookFragment.newInstance();
+        ViewBookFragment viewBookFragment = ViewBookFragment.newInstance();
+
+        fragmentList.add(bookListFragment);
+        fragmentList.add(newBookFragment);
+        fragmentList.add(viewBookFragment);
+    }
+
 }
 
 
@@ -176,3 +226,6 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 
 // References:
 // parcing class - http://www.parcelabler.com/
+// column spacing - https://stackoverflow.com/questions/1666685/android-stretch-columns-evenly-in-a-tablelayout
+// fragment managing strategy - http://blog.iamsuleiman.com/using-bottom-navigation-view-android-design-support-library/
+

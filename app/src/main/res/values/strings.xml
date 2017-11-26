@@ -1,14 +1,14 @@
 <resources>
     <string name="app_name">AndroidFinal</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
+    <string name="title_home">Book List</string>
+    <string name="title_dashboard">Add Book</string>
+    <string name="title_notifications">Update Book</string>
     <string name="new_book_name_textview">Book Name:</string>
-    <string name="new_book_name_hint">Harry Potter and the Deadly Dentist</string>
+    <string name="new_book_name_hint">E.g. Harry Potter and the Deadly Dentist</string>
     <string name="new_book_reader_textview">Reader:</string>
-    <string name="new_book_reader_hint">Lil Tommy</string>
+    <string name="new_book_reader_hint">E.g. Lil Tommy</string>
     <string name="new_book_pages_textview">Total Pages:</string>
-    <string name="new_book_pages_hint">42</string>
+    <string name="new_book_pages_hint">E.g. 42</string>
     <string name="submit_button">Submit</string>
     <string name="empty_field_msg">Please fill in all fields</string>
     <string name="parse_error_msg">Error converting number</string>

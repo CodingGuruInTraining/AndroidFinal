@@ -41,7 +41,7 @@ public class BookListAdapter extends ArrayAdapter<Book> {
 
         readerTextView.setText(book.getReader());
         bookNameTextView.setText(book.getBook_name());
-        pagesTextView.setText(book.getPages_read());
+        pagesTextView.setText(String.valueOf(book.getPages_read()));
 
 
         return view;
