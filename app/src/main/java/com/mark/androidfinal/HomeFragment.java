@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 /**
- *
+ *  Simple fragment to display a single TextView rather than blank screen.
  */
 
 public class HomeFragment extends Fragment {

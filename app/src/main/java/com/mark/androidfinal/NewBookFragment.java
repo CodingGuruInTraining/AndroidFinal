@@ -11,26 +11,32 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 /**
- * Fragment Class
+ * New Book Fragment Class for adding a new entry to database.
  */
 
 public class NewBookFragment extends Fragment {
 
+    // Interface listener.
     private NewBookListener mNewBookListener;
-    // Error strings.
+    // Error string variables.
     private String emptyField;
     private String parseError;
     private String genError;
 
+
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        // Instantiates listener if not already done.
         if (context instanceof NewBookListener) {
             mNewBookListener = (NewBookListener) context;
         } else {
             throw new RuntimeException(context.toString() + " must implement NewBookListener");
         }
     }
+
+
 
     @Override
     public View onCreateView (LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -76,11 +82,9 @@ public class NewBookFragment extends Fragment {
                 }
             }
         });
-
+        // Returns view to be viewed.
         return view;
     }
-
-
 
 
 
@@ -90,6 +94,7 @@ public class NewBookFragment extends Fragment {
     }
 
 
+    // Interface function for interacting with MainActivity.
     public interface NewBookListener {
         void newBookData(String name, String reader, int pages);
     }

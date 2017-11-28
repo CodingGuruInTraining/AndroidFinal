@@ -10,7 +10,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 /**
- *
+ *  Custom ArrayAdapter to manage ListView items.
  */
 
 public class BookListAdapter extends ArrayAdapter<Book> {
@@ -25,6 +25,7 @@ public class BookListAdapter extends ArrayAdapter<Book> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view = convertView;
+        // Inflates view if there isn't one already.
         if (view == null) {
             LayoutInflater inflater = mActivity.getLayoutInflater();
             view = inflater.inflate(R.layout.book_item, parent, false);
@@ -38,12 +39,12 @@ public class BookListAdapter extends ArrayAdapter<Book> {
         TextView bookNameTextView = (TextView) view.findViewById(R.id.list_book_name);
         TextView pagesTextView = (TextView) view.findViewById(R.id.list_pages_read);
 
-
+        // Adds values to widgets.
         readerTextView.setText(book.getReader());
         bookNameTextView.setText(book.getBook_name());
         pagesTextView.setText(String.valueOf(book.getPages_read()));
 
-
+        // Returns view to be viewed in ListView.
         return view;
     }
 }

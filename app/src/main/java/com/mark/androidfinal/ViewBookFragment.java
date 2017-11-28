@@ -14,7 +14,7 @@ import android.widget.TextView;
 import java.text.SimpleDateFormat;
 
 /**
- *
+ *  View Book Fragment Class for displaying a single Book object's attributes for updating.
  */
 
 public class ViewBookFragment extends Fragment {
@@ -23,11 +23,15 @@ public class ViewBookFragment extends Fragment {
     // DateFormatter for Date field.
     private static final SimpleDateFormat dateFormatter = new SimpleDateFormat("M-dd-yyyy hh:mm:ss");
 
+    // Interface listener.
     ViewBookListener viewBookListener;
+
+
 
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        // Instantiates listener if not already done.
         if (context instanceof ViewBookListener) {
             this.viewBookListener = (ViewBookListener) context;
         } else {
@@ -35,10 +39,13 @@ public class ViewBookFragment extends Fragment {
         }
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, final ViewGroup container, Bundle savedInstanceState) {
+        // Inflates view.
         View view = inflater.inflate(R.layout.fragment_view_book, container, false);
 
+        // Sets up widgets.
         TextView bookNameText = (TextView) view.findViewById(R.id.view_book_name_text);
         TextView readerText = (TextView) view.findViewById(R.id.view_reader_text);
         TextView pagesText = (TextView) view.findViewById(R.id.view_pages_read_text);
@@ -47,8 +54,10 @@ public class ViewBookFragment extends Fragment {
         Button updateButton = (Button) view.findViewById(R.id.view_update_button);
         Button cancelButton = (Button) view.findViewById(R.id.view_cancel_button);
 
+        // Grabs Book object from passed Argument and updates global variable.
         passedBook = getArguments().getParcelable(MainActivity.BOOK_KEY);
 
+        // Updates widgets with Book's attributes.
         bookNameText.setText(passedBook.getBook_name());
         readerText.setText(passedBook.getReader());
         pagesText.setText(passedBook.getPages_read() + "");
@@ -56,34 +65,45 @@ public class ViewBookFragment extends Fragment {
         dateStartText.setText(dateFormatter.format(passedBook.getStart_date()));
 
 
+        // Update button's click event.
         updateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                // Creates new Dialog object and sets initial values.
                 final Dialog dialog = new Dialog(container.getContext());
                 dialog.setContentView(R.layout.dialog_update);
                 dialog.setTitle("Update Pages");
 
+                // Sets up custom Dialog's widgets.
                 final EditText editText = (EditText) dialog.findViewById(R.id.dialog_update_edit);
                 Button updateButton = (Button) dialog.findViewById(R.id.dialog_update_button);
 
+                // Dialog's update button's click event.
                 updateButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
+                        // Grabs value from widget.
                         Bundle bundle = new Bundle();
                         String pagesTxt = editText.getText().toString();
+                        // Checks that something has been entered.
                         if (!pagesTxt.equals("")) {
+                            // Converts value to integer and adds to bundle.
                             int pages = Integer.parseInt(pagesTxt);
                             bundle.putParcelable(MainActivity.BOOK_KEY, passedBook);
                             bundle.putInt(MainActivity.PAGES_KEY, pages);
+                            // Passes values back to MainActivity with listener.
                             viewBookListener.updatePages(bundle);
                         }
+                        // Closes dialog.
                         dialog.dismiss();
                     }
                 });
+                // Displays Dialog object.
                 dialog.show();
             }
         });
 
+        // Cancel button's click event.
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -91,16 +111,16 @@ public class ViewBookFragment extends Fragment {
             }
         });
 
-
-
-
+        // Returns view to be viewed.
         return view;
     }
 
+    // Interface function for interacting with MainActivity.
     public interface ViewBookListener {
         void updatePages(Bundle bundle);
     }
 
+    // New Instance function.
     public static ViewBookFragment newInstance() {
         return new ViewBookFragment();
     }

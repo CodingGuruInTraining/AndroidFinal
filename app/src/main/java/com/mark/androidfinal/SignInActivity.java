@@ -24,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 /**
- *
+ *  Sign In Activity for implementing Google Sign In authentication.
  */
 
 public class SignInActivity extends FragmentActivity implements GoogleApiClient.OnConnectionFailedListener, View.OnClickListener {
@@ -35,6 +35,8 @@ public class SignInActivity extends FragmentActivity implements GoogleApiClient.
     private GoogleApiClient mGoogleApiClient;
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
+
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,7 +88,6 @@ public class SignInActivity extends FragmentActivity implements GoogleApiClient.
             handleSignIn(result);
         }
     }
-
 
     private void handleSignIn(GoogleSignInResult result) {
         if (result.isSuccess()) {
