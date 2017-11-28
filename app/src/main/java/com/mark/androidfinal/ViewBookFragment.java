@@ -107,7 +107,7 @@ public class ViewBookFragment extends Fragment {
         cancelButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                viewBookListener.updatePages(new Bundle());
             }
         });
 

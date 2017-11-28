@@ -196,37 +196,42 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         // Retrieves values passed from fragment.
         Book book = bundle.getParcelable(BOOK_KEY);
         int pages = bundle.getInt(PAGES_KEY);
-        String bookId = book.getUniqueId();
+        // Book will be null if Cancel button was pressed.
+        if (book != null) {
+            String bookId = book.getUniqueId();
 
-        // Exception handler.
-        try {
-            // Gets page attributes and calculates new total.
-            int prevPages = book.getPages_read();
-            int newTotal = prevPages + pages;
-            // Checks that new entry doesn't put total over the limit.
-            if (newTotal <= book.getTotal_pages()) {
-                // Updates the pages read value in database.
-                mDatabaseReference.child(bookId).child("pages_read").setValue(pages + prevPages);
-                Toast.makeText(MainActivity.this, "Update Successful", Toast.LENGTH_SHORT).show();
+            // Exception handler.
+            try {
+                // Gets page attributes and calculates new total.
+                int prevPages = book.getPages_read();
+                int newTotal = prevPages + pages;
+                // Checks that new entry doesn't put total over the limit.
+                if (newTotal <= book.getTotal_pages()) {
+                    // Updates the pages read value in database.
+                    mDatabaseReference.child(bookId).child("pages_read").setValue(pages + prevPages);
+                    Toast.makeText(MainActivity.this, "Update Successful", Toast.LENGTH_SHORT).show();
 
-                // Locates Book in global ArrayList and updates its attribute.
-                for (Book x : mBookArrayList) {
-                    if (x.getUniqueId().equals(bookId)) {
-                        x.setPages_read(newTotal);
-                        break;
+                    // Locates Book in global ArrayList and updates its attribute.
+                    for (Book x : mBookArrayList) {
+                        if (x.getUniqueId().equals(bookId)) {
+                            x.setPages_read(newTotal);
+                            break;
+                        }
                     }
+                    // Loads main screen.
+                    loadMainPage();
+                } else {
+                    // Displays Toast if new total is higher than limit.
+                    Toast.makeText(MainActivity.this, "Can't read more than the total", Toast.LENGTH_SHORT).show();
                 }
-
-                // Loads main screen.
-                loadMainPage();
-            } else {
-                // Displays Toast if new total is higher than limit.
-                Toast.makeText(MainActivity.this, "Can't read more than the total", Toast.LENGTH_SHORT).show();
+                // Exception for database query.
+            } catch (NullPointerException er) {
+                er.fillInStackTrace();
+                Toast.makeText(MainActivity.this, "Can't locate book", Toast.LENGTH_SHORT).show();
             }
-        // Exception for database query.
-        } catch (NullPointerException er) {
-            er.fillInStackTrace();
-            Toast.makeText(MainActivity.this, "Can't locate book", Toast.LENGTH_SHORT).show();
+        } else {
+            // Cancel button was pressed so load main screen.
+            loadMainPage();
         }
     }
 
