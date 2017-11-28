@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AndroidFinal</string>
+    <string name="app_name">ReadathonTracker</string>
     <string name="title_home">Book List</string>
     <string name="title_dashboard">Add Book</string>
     <string name="title_notifications">Update Book</string>
@@ -20,4 +20,5 @@
     <string name="dialog_update_text">How many pages have you read since your last update?</string>
     <string name="dialog_update_hint">Pages...</string>
     <string name="main_page">Let\'s Read Some Books!</string>
+    <string name="sign_in_text">Please sign in</string>
 </resources>
