@@ -21,6 +21,8 @@ public class Book implements Parcelable {
     private int pages_read;
     private ArrayList<Float> hours_spent_per_week;
     private boolean completed;
+    private String userId;
+    private String firebaseKey;
 
     Book() {
     }
@@ -89,6 +91,22 @@ public class Book implements Parcelable {
         this.uniqueId = uniqueId;
     }
 
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public String getFirebaseKey() {
+        return firebaseKey;
+    }
+
+    public void setFirebaseKey(String firebaseKey) {
+        this.firebaseKey = firebaseKey;
+    }
+
     protected Book(Parcel in) {
         uniqueId = in.readString();
         book_name = in.readString();
@@ -106,6 +124,8 @@ public class Book implements Parcelable {
             hours_spent_per_week = null;
         }
         completed = in.readByte() != 0x00;
+        userId = in.readString();
+        firebaseKey = in.readString();
     }
 
 
@@ -130,6 +150,8 @@ public class Book implements Parcelable {
             dest.writeList(hours_spent_per_week);
         }
         dest.writeByte((byte) (completed ? 0x01 : 0x00));
+        dest.writeString(userId);
+        dest.writeString(firebaseKey);
     }
 
     @SuppressWarnings("unused")

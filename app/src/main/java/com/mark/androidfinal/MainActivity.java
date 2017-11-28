@@ -1,5 +1,6 @@
 package com.mark.androidfinal;
 
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
@@ -116,7 +117,9 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         FirebaseDatabase db = FirebaseDatabase.getInstance();
         DatabaseReference dbReference = db.getReference();
         mDatabaseReference = dbReference.child(ALL_BOOKS_KEY);
-        allQuery = mDatabaseReference.orderByChild("book_name");
+        allQuery = mDatabaseReference.orderByChild("userId");
+
+// TODO need to give firebase permissions:
         queryAllBooks();
 
 //        FragmentManager fm = getSupportFragmentManager();
@@ -164,24 +167,42 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
         String uniqueId = newReference.getKey();
         newBook.setUniqueId(uniqueId);
 
+        String userId = getSharedPreferences(SignInActivity.USERS_PREFS, MODE_PRIVATE).getString(SignInActivity.FIREBASE_USER_ID_PREF_KEY, "something is wrong");
+        newBook.setUserId(userId);
+
         // Set the value of new child reference to the passed Book object.
-        newReference.setValue(newBook);
+        newReference.setValue(newBook, new DatabaseReference.CompletionListener() {
+            @Override
+            public void onComplete(DatabaseError databaseError, DatabaseReference databaseReference) {
+                if (databaseError == null) {
+                    Log.d(TAG, "entry added to database");
+                } else {
+                    Log.e(TAG, "failed adding to database");
+                }
+            }
+        });
         mBookArrayList.add(newBook);
 //        queryAllBooks();
     }
 
     private void queryAllBooks() {
-        // Queries the database for all entries.
-        mDatabaseReference.orderByChild("pages_read").addListenerForSingleValueEvent(new ValueEventListener() {
+
+//        FirebaseDatabase db = FirebaseDatabase.getInstance();
+//        DatabaseReference dbReference = db.getReference();
+//        mDatabaseReference = dbReference.child(ALL_BOOKS_KEY);
+//        allQuery = mDatabaseReference.orderByChild("userId");
+
+        String userId = getSharedPreferences(SignInActivity.USERS_PREFS, MODE_PRIVATE).getString(SignInActivity.FIREBASE_USER_ID_PREF_KEY, "dunno what im doing");
+//        Query query = dbReference.orderByChild("userId").equalTo(userId);
+        allQuery = mDatabaseReference.equalTo(userId);
+
+        allQuery.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.d(TAG, "ALL DB ENTRIES: " + dataSnapshot.toString());
-
                 ArrayList<Book> allBooks = new ArrayList<Book>();
-
                 for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    Book book = childSnapshot.getValue(Book.class);
-//                    Book book = (Book) childSnapshot.getValue();
+                    Book book = (childSnapshot.getValue(Book.class));
+                    book.setFirebaseKey(childSnapshot.getKey());
                     allBooks.add(book);
                 }
                 mBookArrayList = allBooks;
@@ -192,6 +213,30 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
                 Log.e(TAG, "Firebase Error fetching all entries", databaseError.toException());
             }
         });
+
+
+//        // Queries the database for all entries.
+//        mDatabaseReference.orderByChild("pages_read").addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                Log.d(TAG, "ALL DB ENTRIES: " + dataSnapshot.toString());
+//
+//                ArrayList<Book> allBooks = new ArrayList<Book>();
+//
+//                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+//                    Book book = childSnapshot.getValue(Book.class);
+////                    Book book = (Book) childSnapshot.getValue();
+//                    book.setFirebaseKey(childSnapshot.getKey());
+//                    allBooks.add(book);
+//                }
+//                mBookArrayList = allBooks;
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                Log.e(TAG, "Firebase Error fetching all entries", databaseError.toException());
+//            }
+//        });
 
     }
 
@@ -314,4 +359,5 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 // column spacing - https://stackoverflow.com/questions/1666685/android-stretch-columns-evenly-in-a-tablelayout
 // fragment managing strategy - http://blog.iamsuleiman.com/using-bottom-navigation-view-android-design-support-library/
 // simple update statement - https://stackoverflow.com/questions/33315353/update-specific-keys-using-firebase-for-android
+// getting past firebase permissions - https://stackoverflow.com/questions/37477644/firebase-permission-denied-error
 
