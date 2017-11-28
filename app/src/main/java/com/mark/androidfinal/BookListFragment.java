@@ -11,6 +11,8 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 /**
  *
@@ -43,6 +45,13 @@ public class BookListFragment extends Fragment {
 
 
         allBooksList = getArguments().getParcelableArrayList(MainActivity.ALL_BOOKS_KEY);
+
+        Collections.sort(allBooksList, new Comparator<Book>() {
+            @Override
+            public int compare(Book book1, Book book2) {
+                return Integer.valueOf(book2.getPages_read()).compareTo(book1.getPages_read());
+            }
+        });
 
 //        mRequestQueryListener.requestAllQuery(true);
 

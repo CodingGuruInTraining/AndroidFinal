@@ -24,6 +24,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -192,40 +194,16 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 //        mDatabaseReference = dbReference.child(ALL_BOOKS_KEY);
 //        allQuery = mDatabaseReference.orderByChild("userId");
 
-        String userId = getSharedPreferences(SignInActivity.USERS_PREFS, MODE_PRIVATE).getString(SignInActivity.FIREBASE_USER_ID_PREF_KEY, "dunno what im doing");
-//        Query query = dbReference.orderByChild("userId").equalTo(userId);
-        allQuery = mDatabaseReference.equalTo(userId);
-
-        allQuery.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                ArrayList<Book> allBooks = new ArrayList<Book>();
-                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-                    Book book = (childSnapshot.getValue(Book.class));
-                    book.setFirebaseKey(childSnapshot.getKey());
-                    allBooks.add(book);
-                }
-                mBookArrayList = allBooks;
-            }
-
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Log.e(TAG, "Firebase Error fetching all entries", databaseError.toException());
-            }
-        });
-
-
-//        // Queries the database for all entries.
-//        mDatabaseReference.orderByChild("pages_read").addListenerForSingleValueEvent(new ValueEventListener() {
+//        String userId = getSharedPreferences(SignInActivity.USERS_PREFS, MODE_PRIVATE).getString(SignInActivity.FIREBASE_USER_ID_PREF_KEY, "dunno what im doing");
+////        Query query = dbReference.orderByChild("userId").equalTo(userId);
+//        allQuery = mDatabaseReference.equalTo(userId);
+//
+//        allQuery.addValueEventListener(new ValueEventListener() {
 //            @Override
 //            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Log.d(TAG, "ALL DB ENTRIES: " + dataSnapshot.toString());
-//
 //                ArrayList<Book> allBooks = new ArrayList<Book>();
-//
 //                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
-//                    Book book = childSnapshot.getValue(Book.class);
-////                    Book book = (Book) childSnapshot.getValue();
+//                    Book book = (childSnapshot.getValue(Book.class));
 //                    book.setFirebaseKey(childSnapshot.getKey());
 //                    allBooks.add(book);
 //                }
@@ -237,6 +215,30 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 //                Log.e(TAG, "Firebase Error fetching all entries", databaseError.toException());
 //            }
 //        });
+
+
+        // Queries the database for all entries.
+        mDatabaseReference.orderByChild("pages_read").addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "ALL DB ENTRIES: " + dataSnapshot.toString());
+
+                ArrayList<Book> allBooks = new ArrayList<Book>();
+
+                for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                    Book book = childSnapshot.getValue(Book.class);
+//                    Book book = (Book) childSnapshot.getValue();
+                    book.setFirebaseKey(childSnapshot.getKey());
+                    allBooks.add(book);
+                }
+                mBookArrayList = allBooks;
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, "Firebase Error fetching all entries", databaseError.toException());
+            }
+        });
 
     }
 
