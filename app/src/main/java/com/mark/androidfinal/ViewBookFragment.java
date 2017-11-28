@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -73,6 +74,12 @@ public class ViewBookFragment extends Fragment {
                 final Dialog dialog = new Dialog(container.getContext());
                 dialog.setContentView(R.layout.dialog_update);
                 dialog.setTitle("Update Pages");
+
+                // Sets size of window; otherwise, window is cut off.
+                DisplayMetrics metrics = getResources().getDisplayMetrics();
+                int width = metrics.widthPixels;
+                int height = metrics.heightPixels;
+                dialog.getWindow().setLayout((6*width)/7, (height)/4);
 
                 // Sets up custom Dialog's widgets.
                 final EditText editText = (EditText) dialog.findViewById(R.id.dialog_update_edit);
