@@ -362,4 +362,5 @@ public class MainActivity extends AppCompatActivity implements NewBookFragment.N
 // fragment managing strategy - http://blog.iamsuleiman.com/using-bottom-navigation-view-android-design-support-library/
 // simple update statement - https://stackoverflow.com/questions/33315353/update-specific-keys-using-firebase-for-android
 // getting past firebase permissions - https://stackoverflow.com/questions/37477644/firebase-permission-denied-error
+// reverse order of arraylist - https://stackoverflow.com/questions/2784514/sort-arraylist-of-custom-objects-by-property
 
